@@ -6,6 +6,8 @@ import java.util.*;
 
 public class Solution {
     public int solution(String[] lines) throws ParseException {
+        if (lines.length == 1)
+            return 1;
         ArrayList<Integer> answer = new ArrayList<>();
         // 날짜 포맷
         SimpleDateFormat trafficTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
@@ -34,7 +36,7 @@ public class Solution {
             cal.setTime(trafficTimeFormat.parse(processedStr[1]));
             traffics[i][1] = trafficTimeFormat.format(cal.getTime());
             cal.add(Calendar.SECOND, -sec);
-            cal.add(Calendar.MILLISECOND, -(milliSec-1));
+            cal.add(Calendar.MILLISECOND, -(milliSec - 1));
             traffics[i][0] = trafficTimeFormat.format(cal.getTime());
         }
 
@@ -50,23 +52,18 @@ public class Solution {
             System.out.println(Arrays.toString(traffics[i]));
         }
 
-        Date min = trafficTimeFormat.parse(traffics[0][0]);
-        Date max = trafficTimeFormat.parse(traffics[traffics.length - 1][1]);
-        cal.setTime(min);
-
-        double timeLine = (max.getTime() - min.getTime()) / 1000;
-
-        for (int i = 0; i < timeLine; i++) {
+        for (int i = 0; i < traffics.length; i++) {
             answer.add(0);
             for (int j = 0; j < traffics.length; j++) {
                 Date beforeTime = trafficTimeFormat.parse(traffics[j][0]);
-                Date scanner = cal.getTime();
-                if ((beforeTime.getTime() - scanner.getTime()) <= 0
+                Date afterTime = trafficTimeFormat.parse(traffics[j][1]);
+                Date scanner = trafficTimeFormat.parse(traffics[i][0]);
+                if ((beforeTime.getTime() - scanner.getTime()) <= 0 ||
+                        afterTime.getTime() - scanner.getTime() >= 0
                 ) {
                     answer.set(i, answer.get(i) + 1);
                 }
             }
-            cal.add(Calendar.SECOND, 1);
         }
 
         int result = 0;
