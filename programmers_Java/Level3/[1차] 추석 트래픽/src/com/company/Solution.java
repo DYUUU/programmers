@@ -7,9 +7,8 @@ import java.util.*;
 public class Solution {
     public int solution(String[] lines) throws ParseException {
         int answer = 1;
-        ArrayList<Integer> result = new ArrayList<>();
         // 날짜 포맷
-        SimpleDateFormat trafficTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+        SimpleDateFormat trafficTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         // 날짜 계산기
         Calendar cal = Calendar.getInstance();
         // 트래픽 리스트
@@ -32,7 +31,7 @@ public class Solution {
             }
 
             // 날짜 계산
-            cal.setTime(trafficTimeFormat.parse(processedStr[1]));
+            cal.setTime(trafficTimeFormat.parse( processedStr[0] + " " + processedStr[1]));
             traffics[i][1] = trafficTimeFormat.format(cal.getTime());
             cal.add(Calendar.SECOND, -sec);
             cal.add(Calendar.MILLISECOND, -(milliSec - 001));
@@ -66,7 +65,7 @@ public class Solution {
         // 일자 체크
 
         for (int i = 0; i < trafficLists.length; i++) {
-            result.add(0);
+            int cnt=0;
             Date scannerFront = trafficTimeFormat.parse(trafficLists[i]);
             cal.setTime(scannerFront);
             cal.add(Calendar.MILLISECOND, 999);
@@ -77,14 +76,15 @@ public class Solution {
                 if (scannerBack.getTime() - startTime.getTime() < 0) {
                     break;
                 }
-                else if ((endTime.getTime() >= scannerFront.getTime()) ||
-                        startTime.getTime() >= scannerBack.getTime()
+                else if ((endTime.getTime() >= scannerFront.getTime()) &&
+                        startTime.getTime() <= scannerBack.getTime()
                 ) {
-                    result.set(i, result.get(i) + 1);
+                    cnt++;
                 }
             }
-            if (result.get(i) > answer)
-                answer = result.get(i);
+            if (cnt > answer)
+                answer = cnt;
+
         }
         /////////////////////////////////
 
