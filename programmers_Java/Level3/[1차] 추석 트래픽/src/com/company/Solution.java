@@ -16,9 +16,10 @@ public class Solution {
         Calendar cal = Calendar.getInstance();
         // 트래픽 리스트
         String[][] traffics = new String[lines.length][2];
+        String[] trafficLists = new String[lines.length * 2];
 
+        // 전처리
         for (int i = 0; i < lines.length; i++) {
-            // 전처리
             lines[i] = lines[i].replace("s", "");
             String[] processedStr = lines[i].split(" ");
 
@@ -26,7 +27,6 @@ public class Solution {
             int milliSec = 0;
             int sec = 0;
             if (index == -1) {
-                milliSec = 0;
                 sec = Integer.parseInt(processedStr[2]);
             } else {
                 milliSec = Integer.parseInt(processedStr[2].substring(index + 1, processedStr[2].length()));
@@ -41,6 +41,11 @@ public class Solution {
             traffics[i][0] = trafficTimeFormat.format(cal.getTime());
         }
 
+        for (int i = 0; i < trafficLists.length; i += 2) {
+            trafficLists[i] = traffics[i / 2][0];
+            trafficLists[i + 1] = traffics[i / 2][1];
+        }
+
         // 정렬
         Arrays.sort(traffics, new Comparator<String[]>() {
             @Override
@@ -48,22 +53,19 @@ public class Solution {
                 return o1[0].compareTo(o2[0]);
             }
         });
-
-        for (int i = 0; i < traffics.length; i++) {
-            System.out.println(Arrays.toString(traffics[i]));
-        }
+        Arrays.sort(trafficLists);
 
         ////////////////////////////////////
 
         // 1초 짜리 스캐너가 지나가면서 해당하는 것들을 체크해야 함.
         // ex) 57초일 경우
-        // 57초 보다 크고 58초 보다 작은 것.
+        // 57초 보다 크고 58초 보다 작은 것.'
 
-        for (int i = 0; i < traffics.length; i++) {
+        for (int i = 0; i < trafficLists.length; i++) {
             result.add(0);
-            Date scannerFront = trafficTimeFormat.parse(traffics[i][0]);
+            Date scannerFront = trafficTimeFormat.parse(trafficLists[i]);
             cal.setTime(scannerFront);
-            cal.add(Calendar.MILLISECOND, 999);
+            cal.add(Calendar.MILLISECOND, 1000);
             Date scannerBack = cal.getTime();
             for (int j = 0; j < traffics.length; j++) {
                 Date startTime = trafficTimeFormat.parse(traffics[j][0]);
@@ -71,7 +73,7 @@ public class Solution {
                 if (scannerBack.getTime() - startTime.getTime() < 0) {
                     break;
                 } else if ((startTime.getTime() - scannerFront.getTime()) >= 0 ||
-                        endTime.getTime()-scannerBack.getTime() >=0
+                        endTime.getTime() - scannerBack.getTime() >= 0
                 ) {
                     result.set(i, result.get(i) + 1);
                 }
