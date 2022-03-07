@@ -55,6 +55,10 @@ public class Solution {
         });
         Arrays.sort(trafficLists);
 
+        for (int i = 0; i < traffics.length; i++) {
+            System.out.println(Arrays.toString(traffics[i]));
+        }
+
         ////////////////////////////////////
 
         // 1초 짜리 스캐너가 지나가면서 해당하는 것들을 체크해야 함.
@@ -65,14 +69,19 @@ public class Solution {
             result.add(0);
             Date scannerFront = trafficTimeFormat.parse(trafficLists[i]);
             cal.setTime(scannerFront);
-            cal.add(Calendar.MILLISECOND, 1000);
+            cal.add(Calendar.MILLISECOND, 999);
             Date scannerBack = cal.getTime();
             for (int j = 0; j < traffics.length; j++) {
                 Date startTime = trafficTimeFormat.parse(traffics[j][0]);
                 Date endTime = trafficTimeFormat.parse(traffics[j][1]);
+                if (endTime.getTime() == scannerFront.getTime()&&j+1< traffics.length) {
+                    startTime = trafficTimeFormat.parse(traffics[j][1]);
+                    endTime = trafficTimeFormat.parse(traffics[j + 1][0]);
+                }
                 if (scannerBack.getTime() - startTime.getTime() < 0) {
                     break;
-                } else if ((startTime.getTime() - scannerFront.getTime()) >= 0 ||
+                }
+                if ((startTime.getTime() - scannerFront.getTime()) >= 0 ||
                         endTime.getTime() - scannerBack.getTime() >= 0
                 ) {
                     result.set(i, result.get(i) + 1);
