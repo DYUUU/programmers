@@ -74,10 +74,6 @@ public class Solution {
             for (int j = 0; j < traffics.length; j++) {
                 Date startTime = trafficTimeFormat.parse(traffics[j][0]);
                 Date endTime = trafficTimeFormat.parse(traffics[j][1]);
-                if (endTime.getTime() == scannerFront.getTime()&&j+1< traffics.length) {
-                    startTime = trafficTimeFormat.parse(traffics[j][1]);
-                    endTime = trafficTimeFormat.parse(traffics[j + 1][0]);
-                }
                 if (scannerBack.getTime() - startTime.getTime() < 0) {
                     break;
                 }
