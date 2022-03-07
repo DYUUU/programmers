@@ -8,7 +8,8 @@ public class Solution {
     public int solution(String[] lines) throws ParseException {
         if (lines.length == 1)
             return 1;
-        ArrayList<Integer> answer = new ArrayList<>();
+        int answer = 0;
+        ArrayList<Integer> result = new ArrayList<>();
         // 날짜 포맷
         SimpleDateFormat trafficTimeFormat = new SimpleDateFormat("HH:mm:ss.SSS");
         // 날짜 계산기
@@ -36,7 +37,7 @@ public class Solution {
             cal.setTime(trafficTimeFormat.parse(processedStr[1]));
             traffics[i][1] = trafficTimeFormat.format(cal.getTime());
             cal.add(Calendar.SECOND, -sec);
-            cal.add(Calendar.MILLISECOND, -(milliSec - 1));
+            cal.add(Calendar.MILLISECOND, -(milliSec - 001));
             traffics[i][0] = trafficTimeFormat.format(cal.getTime());
         }
 
@@ -52,29 +53,36 @@ public class Solution {
             System.out.println(Arrays.toString(traffics[i]));
         }
 
+        ////////////////////////////////////
+
+        // 1초 짜리 스캐너가 지나가면서 해당하는 것들을 체크해야 함.
+        // ex) 57초일 경우
+        // 57초 보다 크고 58초 보다 작은 것.
+
         for (int i = 0; i < traffics.length; i++) {
-            answer.add(0);
+            result.add(0);
+            Date scannerFront = trafficTimeFormat.parse(traffics[i][0]);
+            cal.setTime(scannerFront);
+            cal.add(Calendar.MILLISECOND, 999);
+            Date scannerBack = cal.getTime();
             for (int j = 0; j < traffics.length; j++) {
-                Date beforeTime = trafficTimeFormat.parse(traffics[j][0]);
-                Date afterTime = trafficTimeFormat.parse(traffics[j][1]);
-                Date scanner = trafficTimeFormat.parse(traffics[i][0]);
-                if ((beforeTime.getTime() - scanner.getTime()) <= 0 ||
-                        afterTime.getTime() - scanner.getTime() >= 0
+                Date startTime = trafficTimeFormat.parse(traffics[j][0]);
+                Date endTime = trafficTimeFormat.parse(traffics[j][1]);
+                if (scannerBack.getTime() - startTime.getTime() < 0) {
+                    break;
+                } else if ((startTime.getTime() - scannerFront.getTime()) >= 0 ||
+                        endTime.getTime()-scannerBack.getTime() >=0
                 ) {
-                    answer.set(i, answer.get(i) + 1);
+                    result.set(i, result.get(i) + 1);
                 }
             }
+            if (result.get(i) > answer)
+                answer = result.get(i);
         }
+        /////////////////////////////////
 
-        int result = 0;
+        System.out.println(answer);
 
-        for (int i : answer) {
-            if (i > result)
-                result = i;
-        }
-
-        System.out.println(result);
-
-        return result;
+        return answer;
     }
 }
