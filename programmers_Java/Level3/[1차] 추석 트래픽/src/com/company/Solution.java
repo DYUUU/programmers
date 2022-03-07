@@ -6,8 +6,6 @@ import java.util.*;
 
 public class Solution {
     public int solution(String[] lines) throws ParseException {
-        if (lines.length == 1)
-            return 1;
         int answer = 0;
         ArrayList<Integer> result = new ArrayList<>();
         // 날짜 포맷
@@ -54,11 +52,6 @@ public class Solution {
             }
         });
         Arrays.sort(trafficLists);
-
-        for (int i = 0; i < traffics.length; i++) {
-            System.out.println(Arrays.toString(traffics[i]));
-        }
-
         ////////////////////////////////////
 
         // 1초 짜리 스캐너가 지나가면서 해당하는 것들을 체크해야 함.
