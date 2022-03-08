@@ -8,12 +8,12 @@ public class Solution {
     public int solution(String[] lines) throws ParseException {
         int answer = 1;
         // 날짜 포맷
-        SimpleDateFormat trafficTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        SimpleDateFormat trafficTimeFormat = new SimpleDateFormat("dd HH:mm:ss.SSS");
         // 날짜 계산기
         Calendar cal = Calendar.getInstance();
         // 트래픽 리스트
         String[][] traffics = new String[lines.length][2];
-        String[] trafficLists = new String[lines.length * 2];
+        TreeSet<String> trafficLists = new TreeSet<>();
 
         // 전처리
         for (int i = 0; i < lines.length; i++) {
@@ -31,16 +31,13 @@ public class Solution {
             }
 
             // 날짜 계산
-            cal.setTime(trafficTimeFormat.parse( processedStr[0] + " " + processedStr[1]));
+            cal.setTime(trafficTimeFormat.parse(processedStr[0].substring(processedStr[0].length()-2,processedStr[0].length()) + " " + processedStr[1]));
             traffics[i][1] = trafficTimeFormat.format(cal.getTime());
             cal.add(Calendar.SECOND, -sec);
             cal.add(Calendar.MILLISECOND, -(milliSec - 001));
             traffics[i][0] = trafficTimeFormat.format(cal.getTime());
-        }
-
-        for (int i = 0; i < trafficLists.length; i += 2) {
-            trafficLists[i] = traffics[i / 2][0];
-            trafficLists[i + 1] = traffics[i / 2][1];
+            trafficLists.add(traffics[i][0]);
+            trafficLists.add(traffics[i][1]);
         }
 
         // 정렬
@@ -50,23 +47,11 @@ public class Solution {
                 return o1[0].compareTo(o2[0]);
             }
         });
-        Arrays.sort(trafficLists);
 
-        for (int i = 0; i < traffics.length; i++) {
-            System.out.println(Arrays.toString(traffics[i]));
-        }
-        ////////////////////////////////////
 
-        // 1초 짜리 스캐너가 지나가면서 해당하는 것들을 체크해야 함.
-        // ex) 57초일 경우
-        // 57초 보다 크고 58초 보다 작은 것.'
-        // 앞으로도 계산해볼것
-        // break 확인
-        // 일자 체크
-
-        for (int i = 0; i < trafficLists.length; i++) {
-            int cnt=0;
-            Date scannerFront = trafficTimeFormat.parse(trafficLists[i]);
+        for (String traffic : trafficLists) {
+            int cnt = 0;
+            Date scannerFront = trafficTimeFormat.parse(traffic);
             cal.setTime(scannerFront);
             cal.add(Calendar.MILLISECOND, 999);
             Date scannerBack = cal.getTime();
@@ -75,8 +60,7 @@ public class Solution {
                 Date endTime = trafficTimeFormat.parse(traffics[j][1]);
                 if (scannerBack.getTime() - startTime.getTime() < 0) {
                     break;
-                }
-                else if ((endTime.getTime() >= scannerFront.getTime()) &&
+                } else if ((endTime.getTime() >= scannerFront.getTime()) &&
                         startTime.getTime() <= scannerBack.getTime()
                 ) {
                     cnt++;
@@ -86,7 +70,6 @@ public class Solution {
                 answer = cnt;
 
         }
-        /////////////////////////////////
 
         System.out.println(answer);
 
