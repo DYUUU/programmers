@@ -1,44 +1,47 @@
 package com.company;
 
+import java.util.*;
 
 public class Solution {
-    int targetNum;
-    int targetIndex = 0;
-
-    public void binarySearch(int[] complete, int left, int right) {
-        int mid = (left + right) / 2;
-        if (complete[left] == targetNum) {
-            targetIndex = left;
-        } else {
-            if (complete[mid] < targetNum) {
-                binarySearch(complete, mid + 1, right);
-            } else {
-                binarySearch(complete, left, mid - 1);
-            }
-        }
-
-    }
+//
+//    public void binarySearch(int[] complete, int left, int right) {
+//        int mid = (left + right) / 2;
+//        if (complete[left] == targetNum) {
+//            targetIndex = left;
+//        } else {
+//            if (complete[mid] < targetNum) {
+//                binarySearch(complete, mid + 1, right);
+//            } else {
+//                binarySearch(complete, left, mid - 1);
+//            }
+//        }
+//
+//    }
 
     public long solution(int n, int[] times) {
-        targetNum = n;
         long answer = 0;
-        int[] complete = new int[(n * times[0]) + 1];
-
+        long[][] timeList = new long[times.length][2];
         int cnt = 0;
 
-        for (int i = 1; i < complete.length; i++) {
-            for (int j = 0; j < times.length; j++) {
-                if (i % times[j] == 0) {
-                    cnt++;
-                    complete[i] = cnt;
-                } else {
-                    complete[i] = cnt;
-                }
-            }
+        for (int i = 0; i < times.length; i++) {
+            timeList[i][0] = times[i];
+            timeList[i][1] = times[i];
         }
 
-        binarySearch(complete, 0, complete.length);
+        while (cnt != n) {
+            Arrays.sort(timeList, new Comparator<long[]>() {
+                @Override
+                public int compare(long[] o1, long[] o2) {
+                    return (int) (o1[0] - o2[0]);
+                }
+            });
+            answer = timeList[0][0];
+            timeList[0][0] += timeList[0][1];
+            cnt++;
+        }
 
-        return targetIndex;
+        System.out.println(answer);
+
+        return answer;
     }
 }

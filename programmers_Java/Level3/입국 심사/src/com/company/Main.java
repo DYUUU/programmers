@@ -1,13 +1,18 @@
 package com.company;
 
+import java.util.Arrays;
+
 public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        int n =  6;
-        int[] times= {7,10};
+        int n =  1000000000;
+        int[] times= new int[100000];
+
+        Arrays.fill(times, 1000000000);
 
         Solution sol = new Solution();
-        sol.solution(n,times);
+//        sol.solution(n,times);
+        sol.solution(10,new int[]{6,8,10});
     }
 }
