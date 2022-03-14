@@ -20,24 +20,40 @@ public class Solution {
 
     public long solution(int n, int[] times) {
         long answer = 0;
-        long[][] timeList = new long[times.length][2];
+        ArrayList<long[][]> timeList = new ArrayList<>();
         int cnt = 0;
+        boolean flag = false;
 
         for (int i = 0; i < times.length; i++) {
-            timeList[i][0] = times[i];
-            timeList[i][1] = times[i];
+            if (timeList.size() > 0) {
+                for (int j = 0; j < timeList.size(); j++) {
+                    if (times[i] == timeList.get(j)[0][0]) {
+                        timeList.get(j)[0][1] += 1;
+                        flag = true;
+                    }
+                }
+            }
+            if (!flag) {
+                long[][] tmp = new long[1][3];
+                tmp[0][0] = times[i];
+                tmp[0][1] = 1;
+                tmp[0][2] = times[i];
+                timeList.add(tmp);
+            }
+            flag = false;
         }
 
+
         while (cnt != n) {
-            Arrays.sort(timeList, new Comparator<long[]>() {
+            timeList.sort(new Comparator<long[][]>() {
                 @Override
-                public int compare(long[] o1, long[] o2) {
-                    return (int) (o1[0] - o2[0]);
+                public int compare(long[][] o1, long[][] o2) {
+                    return (int) (o1[0][0] - o2[0][0]);
                 }
             });
-            answer = timeList[0][0];
-            timeList[0][0] += timeList[0][1];
-            cnt++;
+            answer = timeList.get(0)[0][0];
+            cnt += timeList.get(0)[0][1];
+            timeList.get(0)[0][0] += timeList.get(0)[0][2];
         }
 
         System.out.println(answer);
