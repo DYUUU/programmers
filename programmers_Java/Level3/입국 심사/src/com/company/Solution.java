@@ -20,40 +20,33 @@ public class Solution {
 
     public long solution(int n, int[] times) {
         long answer = 0;
-        ArrayList<long[][]> timeList = new ArrayList<>();
+        TreeMap<Long, int[]> timeMap = new TreeMap<>();
         int cnt = 0;
-        boolean flag = false;
 
         for (int i = 0; i < times.length; i++) {
-            if (timeList.size() > 0) {
-                for (int j = 0; j < timeList.size(); j++) {
-                    if (times[i] == timeList.get(j)[0][0]) {
-                        timeList.get(j)[0][1] += 1;
-                        flag = true;
-                    }
-                }
+            int[] tmp;
+            if (timeMap.containsKey((long) times[i])) {
+                tmp = timeMap.get((long) times[i]);
+                tmp[0]++;
+            } else {
+                tmp = new int[]{1, times[i]};
             }
-            if (!flag) {
-                long[][] tmp = new long[1][3];
-                tmp[0][0] = times[i];
-                tmp[0][1] = 1;
-                tmp[0][2] = times[i];
-                timeList.add(tmp);
-            }
-            flag = false;
+            timeMap.put((long) times[i], tmp);
         }
 
 
-        while (cnt != n) {
-            timeList.sort(new Comparator<long[][]>() {
-                @Override
-                public int compare(long[][] o1, long[][] o2) {
-                    return (int) (o1[0][0] - o2[0][0]);
+        while (cnt < n) {
+            for (long time : timeMap.keySet()) {
+                answer = time;
+                int[] tmpValue = timeMap.get(time);
+                cnt += tmpValue[0];
+                if (timeMap.containsKey(time + tmpValue[1])) {
+                    tmpValue[0]++;
                 }
-            });
-            answer = timeList.get(0)[0][0];
-            cnt += timeList.get(0)[0][1];
-            timeList.get(0)[0][0] += timeList.get(0)[0][2];
+                timeMap.put(time + tmpValue[1], tmpValue);
+                timeMap.remove(time);
+                break;
+            }
         }
 
         System.out.println(answer);
