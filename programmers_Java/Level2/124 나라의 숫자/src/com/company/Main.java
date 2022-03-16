@@ -7,6 +7,6 @@ public class Main {
         int[] n = {1,2,3,10};
 
             Solution sol = new Solution();
-            sol.solution(15);
+            sol.solution(90);
     }
 }

@@ -1,20 +1,20 @@
 package com.company;
 
 public class Solution {
-    public String result = "";
+    public StringBuilder result = new StringBuilder();
     public void DFS(int num)
     {
+            int remain=num%3;
         if(num==0) {
             return;
         }
         else{
-            int remain=num%3;
             num /= 3;
             if (remain == 0) {
-                result = 4 + result;
+                result.append(4);
                 DFS(num-1);
             } else {
-                result = remain + result;
+                result.append(remain);
                 DFS(num);
             }
         }
@@ -22,8 +22,9 @@ public class Solution {
 
     public String solution(int n) {
         // 3진법
-        DFS(n);
 
-        return result;
+        DFS(n);
+        String answer = String.valueOf(result.reverse());
+        return answer;
     }
 }
