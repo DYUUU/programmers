@@ -16,6 +16,11 @@ public class Solution {
         {
             answer++;
             result.add(result.poll()+(result.poll()*2));
+            if(result.size()==1&&result.peek()<K)
+            {
+                answer=-1;
+                break;
+            }
         }
 
         System.out.println(answer);
