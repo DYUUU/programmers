@@ -3,19 +3,24 @@ package com.company;
 public class Solution {
 
     public String DFS(StringBuilder u, StringBuilder v) {
-        int index = 0;
-        String resultOfV="";
+        String resultOfV = "";
 
-        if(v.length()!=0) {
-            index = div(String.valueOf(v));
+        if (v.length() != 0) {
+            int index = div(String.valueOf(v));
             resultOfV = DFS(new StringBuilder(v.substring(0, index)), new StringBuilder(v.substring(index, v.length())));
         }
-        if(u.charAt(u.length()-1)=='(')
-        {
+        if (u.charAt(u.length() - 1) == '(') {
             // 새로운 문자열 만들기
-            u.delete(0,1);
-            u.delete(u.length()-1,u.length());
-            String tmp = "("+resultOfV+")"+u.reverse();
+            u.delete(0, 1);
+            u.delete(u.length() - 1, u.length());
+            // 괄호 모양 뒤집기
+            for (int i = 0; i < u.length(); i++) {
+                if (u.charAt(i) == '(')
+                    u.setCharAt(i, ')');
+                else if (u.charAt(i) == ')')
+                    u.setCharAt(i, '(');
+            }
+            String tmp = "(" + resultOfV + ")" + u;
             return tmp;
         } else {
             return u + resultOfV;
@@ -43,10 +48,14 @@ public class Solution {
     public String solution(String p) {
         String answer = "";
         int index = div(p);
-        answer = DFS(new StringBuilder(p.substring(0, index)), new StringBuilder(p.substring(index, p.length())));
+        if (index == 0) {
+            return answer;
+        } else {
+            answer = DFS(new StringBuilder(p.substring(0, index)), new StringBuilder(p.substring(index, p.length())));
 
-        System.out.println(answer);
+            System.out.println(answer);
 
-        return answer;
+            return answer;
+        }
     }
 }
