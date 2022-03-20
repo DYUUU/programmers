@@ -13,6 +13,6 @@ public class Main {
 
         Solution sol = new Solution();
 //        sol.solution(n,times);
-        sol.solution(10,new int[]{6,8,10});
+        sol.solution(6,new int[]{7,10});
     }
 }
