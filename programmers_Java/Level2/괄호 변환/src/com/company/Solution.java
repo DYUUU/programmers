@@ -6,6 +6,7 @@ public class Solution {
         String resultOfV = "";
 
         if (v.length() != 0) {
+            //3. 뒷부분
             int index = div(String.valueOf(v));
             resultOfV = DFS(new StringBuilder(v.substring(0, index)), new StringBuilder(v.substring(index, v.length())));
         }
@@ -23,6 +24,7 @@ public class Solution {
             String tmp = "(" + resultOfV + ")" + u;
             return tmp;
         } else {
+            //3-1
             return u + resultOfV;
         }
 
@@ -46,11 +48,15 @@ public class Solution {
     }
 
     public String solution(String p) {
+
         String answer = "";
-        int index = div(p);
-        if (index == 0) {
+        //1
+        if (p.length() == 0) {
             return answer;
         } else {
+            // 2
+            int index = div(p);
+            //3 앞 U(균형, 나머지)
             answer = DFS(new StringBuilder(p.substring(0, index)), new StringBuilder(p.substring(index, p.length())));
 
             System.out.println(answer);
