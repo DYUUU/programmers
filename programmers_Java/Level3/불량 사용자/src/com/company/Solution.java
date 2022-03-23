@@ -1,16 +1,41 @@
 package com.company;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 
 public class Solution {
+    public LinkedList<LinkedList<String>> banned_id_linkedList = new LinkedList<>();
+    public int banned_list;
+    public HashSet<HashSet<String>> result = new HashSet<>();
+
+    public void DFS(HashSet<String> comb,int row,int col)
+    {
+        if(row== banned_id_linkedList.size())
+        {
+            if(banned_list==comb.size()) {
+                System.out.println(comb);
+                result.add((HashSet<String>) comb.clone());
+            }
+        }
+        else {
+            LinkedList<String> tmp = (LinkedList<String>) banned_id_linkedList.get(row).clone();
+            if(col==tmp.size()-1)
+            {
+                return;
+            }
+            else {
+                tmp.remove(0);
+                DFS((HashSet<String>) comb.clone(), row, col + 1);
+                comb.add(tmp.get(col));
+                DFS((HashSet<String>) comb.clone(), row + 1, 0);
+            }
+        }
+    }
 
     public int solution(String[] user_id, String[] banned_id) {
         int answer = 1;
         boolean flag = true;
-        LinkedList<LinkedList<String>> banned_id_linkedList = new LinkedList<>();
+        banned_list=banned_id.length;
 
         for (int i = 0; i < banned_id.length; i++) {
             LinkedList<String> banned_id_arr = new LinkedList<>();
@@ -36,10 +61,8 @@ public class Solution {
             banned_id_linkedList.add(banned_id_arr);
         }
 
-        System.out.println(banned_id_linkedList);
+        DFS(new HashSet<String>(),0,0);
 
-        // 다중 방문처리를 못하겠음!
-
-        return answer;
+        return result.size();
     }
 }
