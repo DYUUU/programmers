@@ -3,52 +3,40 @@ package com.company;
 import java.util.*;
 
 public class Solution {
+    public int sec=0;
     public int solution(int[][] jobs) {
-        int answer = 0;
-        int sec = 0;
-        int processing = 0;
 
-        PriorityQueue<Integer> waiting_jobs_queue = new PriorityQueue<Integer>();
-        Queue<Integer> completed_jobs_queue = new LinkedList<>();
-
-        Arrays.sort(jobs, new Comparator<int[]>() {
+        PriorityQueue<int[]> pq =new PriorityQueue<>(new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
-                if (o1[1] >= o2[0])
-                    return o1[1] - o2[1];
-                else
-                    return o1[0] - o2[0];
+                return (sec-o1[0]+o1[1])-(sec-o2[0]+o2[1]);
             }
         });
-        // 첫 번재 process 추가
-        processing = (jobs[0][1]);
+        HashSet<Integer> check = new HashSet<>();
 
-
-        while (completed_jobs_queue.size() != jobs.length) {
-            sec++;
-            processing--;
-            for (int i = 0; i < jobs.length; i++) {
-                if (jobs[i][0] == sec) {
-                    waiting_jobs_queue.add(jobs[i][1]);
-
+        int sum=0;
+        while(check.size()!=jobs.length||!pq.isEmpty()){
+            for(int i=0;i<jobs.length;i++){
+                if(jobs[i][0]<=sec&&check.add(i)){
+                    pq.add(jobs[i]);
                 }
             }
-            if (processing == 0) {
-                completed_jobs_queue.add(sec - jobs[completed_jobs_queue.size()][0]);
-                if (waiting_jobs_queue.isEmpty())
-                    break;
-                else
-                    processing = waiting_jobs_queue.poll();
+            if(pq.size()==0){
+                sec++;
+                continue;
+            }
+            int[] tmp=pq.poll();
+            sum+=sec-tmp[0]+tmp[1];
+            sec+=tmp[1];
+            ArrayList<int[]> ttmp= new ArrayList<>();
+            while(!pq.isEmpty()){
+                ttmp.add(pq.poll());
+            }
+            for(int[] item : ttmp){
+                pq.add(item);
             }
         }
-        System.out.println(completed_jobs_queue);
 
-        for (int i = 0; i < jobs.length; i++) {
-            answer += completed_jobs_queue.poll();
-        }
-        answer /= jobs.length;
-
-
-        return answer;
+        return sum/check.size();
     }
 }
