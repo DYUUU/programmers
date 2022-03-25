@@ -4,7 +4,7 @@ public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        int[][] jobs = {{0, 3}, {1, 9}, {2, 6}};
+        int[][] jobs = {{1, 3}, {2, 6}, {1, 9}};
 
         Solution sol = new Solution();
 

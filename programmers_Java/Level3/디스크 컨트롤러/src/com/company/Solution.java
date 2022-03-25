@@ -1,42 +1,50 @@
 package com.company;
 
+import java.time.Period;
 import java.util.*;
 
 public class Solution {
-    public int sec=0;
     public int solution(int[][] jobs) {
+        ArrayList<Integer> check= new ArrayList<>();
+        int answer=0;
+        int sec = 0;
+        boolean[] use = new boolean[jobs.length];
 
-        PriorityQueue<int[]> pq =new PriorityQueue<>(new Comparator<int[]>() {
+        PriorityQueue<int[]> pq = new PriorityQueue<>(new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
-                return (sec-o1[0]+o1[1])-(sec-o2[0]+o2[1]);
+                return o1[1]-o2[1];
             }
         });
-        HashSet<Integer> check = new HashSet<>();
 
-        int sum=0;
-        while(check.size()!=jobs.length||!pq.isEmpty()){
-            for(int i=0;i<jobs.length;i++){
-                if(jobs[i][0]<=sec&&check.add(i)){
+        while(check.size()!=jobs.length)
+        {
+            for(int i = 0;i<jobs.length;i++)
+            {
+                if(sec>=jobs[i][0]&&use[i]==false) {
                     pq.add(jobs[i]);
+                    use[i]=true;
                 }
             }
-            if(pq.size()==0){
+            if(pq.isEmpty())
                 sec++;
-                continue;
-            }
-            int[] tmp=pq.poll();
-            sum+=sec-tmp[0]+tmp[1];
-            sec+=tmp[1];
-            ArrayList<int[]> ttmp= new ArrayList<>();
-            while(!pq.isEmpty()){
-                ttmp.add(pq.poll());
-            }
-            for(int[] item : ttmp){
-                pq.add(item);
+            else
+            {
+                check.add(sec-pq.peek()[0]+pq.peek()[1]);
+                sec+=pq.poll()[1];
             }
         }
 
-        return sum/check.size();
+        for(int i : check)
+        {
+            answer+=i;
+        }
+
+        answer/=jobs.length;
+
+        System.out.println(answer);
+
+        return answer;
+
     }
 }
