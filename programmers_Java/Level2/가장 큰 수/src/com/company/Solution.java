@@ -26,8 +26,7 @@ public class Solution {
                             return compare(o1.substring(1, 4), o2.substring(1, o2.length()));
                     } else if (o2.length() == 1)
                         return o2.charAt(0) - o1.charAt(1);
-                }
-                 else if (o1.length() == 3) {
+                } else if (o1.length() == 3) {
                     if (o1.charAt(0) == o2.charAt(0)) {
                         if (o2.length() == 3) {
                             return compare(o1.substring(1, 3), o2.substring(1, 3));
@@ -51,11 +50,13 @@ public class Solution {
 
         System.out.println(numbersArr);
 
-        for(String str : numbersArr)
-        {
-            answer+=str;
+        for (String str : numbersArr) {
+            answer += str;
         }
 
+        if(answer.charAt(0)=='0')
+            return "0";
+        else
         return answer;
     }
 }
