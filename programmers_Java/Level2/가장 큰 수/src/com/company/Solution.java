@@ -1,14 +1,25 @@
 package com.company;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class Solution {
     public boolean[] visit;
-    public String min = "0";
+    public ArrayList<String> strArr = new ArrayList<>();
     public void comb(String answer, int[] numbers,int cnt){
         if(cnt==numbers.length)
         {
-            if(Long.valueOf(min)<Long.valueOf(answer))
+            strArr.add(answer);
+            strArr.sort(new Comparator<String>() {
+                @Override
+                public int compare(String o1, String o2) {
+                    return Integer.parseInt(o1)-Integer.parseInt(o2);
+                }
+            });
+            if(strArr.size()==2)
             {
-                min=answer;
+                strArr.remove(0);
             }
             return ;
         }
@@ -30,8 +41,8 @@ public class Solution {
         String answer = "";
 
         comb("",numbers,0);
-        System.out.println(min);
+        System.out.println(strArr);
 
-        return min;
+        return strArr.get(0);
     }
 }
