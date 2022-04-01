@@ -20,6 +20,10 @@ public class Solution {
         numbersArr.sort(new Comparator<Integer>() {
             @Override
             public int compare(Integer o1, Integer o2) {
+                if(o1>=100)
+                {
+
+                }
                 if (o1 >= 10) {
                     if (o2 < 10) {
                         if (o1 / 10 <= o2) {
