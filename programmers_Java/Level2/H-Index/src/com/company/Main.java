@@ -4,9 +4,10 @@ public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        int[] numbers = {2,3,57,899};
+        int[] citations =  { 10, 10, 10, 10, 10};
 
         Solution sol = new Solution();
-        sol.solution(numbers);
+        sol.solution(citations);
+
     }
 }
