@@ -5,10 +5,11 @@ import java.util.*;
 public class Solution {
     public int[] solution(String[] genres, int[] plays) {
         int[] answer = {};
-        TreeMap<String, Integer> tm = new TreeMap<>();
-        Stack<String> stack = new Stack<>();
+        HashMap<String, Integer> hashMap = new HashMap<>();
         HashMap<String, ArrayList<int[]>> lists = new HashMap<>();
         ArrayList<Integer> result = new ArrayList<>();
+        Stack<String> stack = new Stack<>();
+
 
         for (int i = 0; i < genres.length; i++) {
             ArrayList<int[]> tmpArr = new ArrayList<>();
@@ -16,30 +17,36 @@ public class Solution {
             if (lists.containsKey(genres[i])) {
                 tmpArr = (ArrayList<int[]>) lists.get(genres[i]).clone();
             }
-                tmpArr.add(tmp);
-                tmpArr.sort(new Comparator<int[]>() {
-                    @Override
-                    public int compare(int[] o1, int[] o2) {
-                        if (o2[1] == o1[1]) {
-                            return o1[0] - o2[0];
-                        }
-                        return o2[1] - o1[1];
+            tmpArr.add(tmp);
+            tmpArr.sort(new Comparator<int[]>() {
+                @Override
+                public int compare(int[] o1, int[] o2) {
+                    if (o2[1] == o1[1]) {
+                        return o1[0] - o2[0];
                     }
-                });
+                    return o2[1] - o1[1];
+                }
+            });
             lists.put(genres[i], tmpArr);
         }
 
         for (int i = 0; i < genres.length; i++) {
-            if (tm.containsKey(genres[i]))
-                tm.put(genres[i], tm.get(genres[i]) + plays[i]);
-            else
-                tm.put(genres[i], plays[i]);
+            if (hashMap.containsKey(genres[i])) {
+                hashMap.put(genres[i], hashMap.get(genres[i]) + plays[i]);
+            } else {
+                hashMap.put(genres[i], plays[i]);
+            }
         }
 
-        for (String str : tm.keySet())
-            stack.add(str);
+        List<Map.Entry<String,Integer>> list = new ArrayList<>(hashMap.entrySet());
+        list.sort(Map.Entry.comparingByValue());
+        System.out.println(list);
 
-        tm.clear();
+
+        for (int i = 0 ; i< list.size();i++)
+            stack.add(list.get(i).getKey());
+
+        System.out.println(stack);
 
         while (stack.size() != 0) {
 
@@ -54,10 +61,9 @@ public class Solution {
             stack.pop();
         }
 
-        answer=new int[result.size()];
-        for(int i=0;i<result.size();i++)
-        {
-            answer[i]=result.get(i);
+        answer = new int[result.size()];
+        for (int i = 0; i < result.size(); i++) {
+            answer[i] = result.get(i);
         }
 
         System.out.println(Arrays.toString(answer));
