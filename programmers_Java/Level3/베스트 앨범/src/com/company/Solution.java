@@ -46,8 +46,6 @@ public class Solution {
         for (int i = 0 ; i< list.size();i++)
             stack.add(list.get(i).getKey());
 
-        System.out.println(stack);
-
         while (stack.size() != 0) {
 
             String targetGenre = stack.peek();
@@ -65,8 +63,6 @@ public class Solution {
         for (int i = 0; i < result.size(); i++) {
             answer[i] = result.get(i);
         }
-
-        System.out.println(Arrays.toString(answer));
 
         return answer;
     }
