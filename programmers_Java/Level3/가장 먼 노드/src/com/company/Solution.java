@@ -6,22 +6,31 @@ public class Solution {
     public boolean[] visit;
     public int num;
 
-    public void DFS(int[][] map, int x, int y, String answer) {
-        if (x == num||y==num) {
-            System.out.println(answer);
+    public void DFS(boolean[][] map, int x, int y, String answer) {
+        if (x == num || y == num) {
+                        System.out.println(answer);
             return;
         } else {
-            for (int i = 0; i < num; i++) {
-                if (!visit[i]) {
-                    visit[i] = true;
-                    if (map[x][y] == 1) {
+                    if (map[x][y]) {
+                        map[x][y] = false;
                         DFS(map, y, x + 1, answer + " " + (y + 1));
-                        DFS(map, x, y + 1, answer);
+                        int tmp = y;
+                        while(!map[x][y])
+                        {
+                            y++;
+                            if(y==num)
+                                break;
+                        }
+                        DFS(map, x, y, answer);
                     } else {
-                        DFS(map, x, y + 1, answer);
+                        while(!map[x][y])
+                        {
+                            y++;
+                            if(y==num)
+                                break;
+                        }
+                        DFS(map, x, y, answer);
                     }
-                }
-            }
         }
     }
 
@@ -29,11 +38,11 @@ public class Solution {
         int answer = 0;
         num = n;
         visit = new boolean[n];
-        int[][] map = new int[n][n];
+        boolean[][] map = new boolean[n][n];
 
         for (int i = 0; i < edge.length; i++) {
-            map[edge[i][0] - 1][edge[i][1] - 1] = 1;
-            map[edge[i][1] - 1][edge[i][0] - 1] = 1;
+            map[edge[i][0] - 1][edge[i][1] - 1] = true;
+            map[edge[i][1] - 1][edge[i][0] - 1] = true;
         }
 
         for (int i = 0; i < n; i++)
