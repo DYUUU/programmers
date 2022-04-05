@@ -1,47 +1,50 @@
 package com.company;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
-
-public class Solution {
-    public ArrayList<ArrayList<Integer>> nodes = new ArrayList<>();
-    public ArrayList<Integer> dist = new ArrayList<>();
-    public boolean[] visit;
-
-    public void BFS(int x, int y, String answer) {
-        for (int i = 0; i < nodes.get(y).size(); i++) {
-            if (!visit[x]) {
-                visit[x] = true;
-                BFS(y, nodes.get(y).get(i), answer+" " +y);
-                System.out.println(answer);
-                visit[x] = false;
-            }
-        }
-    }
+class Solution {
+    static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+    static boolean[] visited;
 
     public int solution(int n, int[][] edge) {
-        int answer = 0;
-        visit = new boolean[n + 1];
+        visited = new boolean[n + 1];
+        int answer;
 
-        for (int i = 0; i < edge.length; i++) {
-            nodes.add(new ArrayList<Integer>());
-            dist.add(Integer.MAX_VALUE);
+        for (int i = 0; i <= n; i++) {
+            graph.add(i, new ArrayList<>());
         }
 
-        for (int[] distance : edge) {
-            nodes.get(distance[1]).add(distance[0]);
-            nodes.get(distance[0]).add(distance[1]);
+        for (int i = 0; i < edge.length; i++) {     // 양방향 추가해주기
+            graph.get(edge[i][0]).add(edge[i][1]);
+            graph.get(edge[i][1]).add(edge[i][0]);
         }
-
-        for (int i = 0; i < nodes.get(1).size(); i++) {
-            BFS(1, nodes.get(1).get(i), "1");
-        }
-
-        System.out.println(dist);
-
-
+        answer = bfs();
         return answer;
     }
 
+    public static int bfs() {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(1);
+        visited[1] = true;
+
+        int cnt = 0;
+        while (true) {
+            Queue<Integer> temp = new LinkedList<>();
+
+            while (!queue.isEmpty()) {
+                int cur = queue.poll();
+                for (int adj : graph.get(cur)) {
+                    if (!visited[adj]) {
+                        temp.add(adj);
+                        visited[adj] = true;
+                    }
+                }
+            }
+
+            if (temp.isEmpty()) break;
+            queue.addAll(temp);
+            cnt = temp.size();
+        }
+
+        return cnt;
+    }
 }
