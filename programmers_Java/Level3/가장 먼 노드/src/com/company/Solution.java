@@ -1,54 +1,45 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
 public class Solution {
+    public ArrayList<ArrayList<Integer>> nodes = new ArrayList<>();
+    public ArrayList<Integer> dist = new ArrayList<>();
     public boolean[] visit;
-    public int num;
 
-    public void DFS(boolean[][] map, int x, int y, String answer) {
-        if (x == num || y == num) {
-                        System.out.println(answer);
-            return;
-        } else {
-                    if (map[x][y]) {
-                        map[x][y] = false;
-                        DFS(map, y, x + 1, answer + " " + (y + 1));
-                        int tmp = y;
-                        while(!map[x][y])
-                        {
-                            y++;
-                            if(y==num)
-                                break;
-                        }
-                        DFS(map, x, y, answer);
-                    } else {
-                        while(!map[x][y])
-                        {
-                            y++;
-                            if(y==num)
-                                break;
-                        }
-                        DFS(map, x, y, answer);
-                    }
+    public void BFS(int x, int y, String answer) {
+        for (int i = 0; i < nodes.get(y).size(); i++) {
+            if (!visit[x]) {
+                visit[x] = true;
+                BFS(y, nodes.get(y).get(i), answer+" " +y);
+                System.out.println(answer);
+                visit[x] = false;
+            }
         }
     }
 
     public int solution(int n, int[][] edge) {
         int answer = 0;
-        num = n;
-        visit = new boolean[n];
-        boolean[][] map = new boolean[n][n];
+        visit = new boolean[n + 1];
 
         for (int i = 0; i < edge.length; i++) {
-            map[edge[i][0] - 1][edge[i][1] - 1] = true;
-            map[edge[i][1] - 1][edge[i][0] - 1] = true;
+            nodes.add(new ArrayList<Integer>());
+            dist.add(Integer.MAX_VALUE);
         }
 
-        for (int i = 0; i < n; i++)
-            System.out.println(Arrays.toString(map[i]));
+        for (int[] distance : edge) {
+            nodes.get(distance[1]).add(distance[0]);
+            nodes.get(distance[0]).add(distance[1]);
+        }
 
-        DFS(map, 0, 0, "1");
+        for (int i = 0; i < nodes.get(1).size(); i++) {
+            BFS(1, nodes.get(1).get(i), "1");
+        }
+
+        System.out.println(dist);
+
 
         return answer;
     }
