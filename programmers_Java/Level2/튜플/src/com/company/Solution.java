@@ -1,6 +1,5 @@
 package com.company;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Solution {
@@ -11,7 +10,6 @@ public class Solution {
         int startIdx = 0;
         int endIdx = 0;
         LinkedList<LinkedList<Integer>> comb = new LinkedList<>();
-        LinkedList<Integer> result = new LinkedList<>();
 
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == '{') {
@@ -58,7 +56,6 @@ public class Solution {
             answer[i]=queue.poll();
         }
 
-        System.out.println(Arrays.toString(answer));
 
         return answer;
     }
