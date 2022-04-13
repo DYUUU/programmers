@@ -7,31 +7,31 @@ public class Solution {
     public int num;
 
     public void DFS(boolean[][] map, int x, int y, String answer) {
-        if (x == num || y == num) {
-                        System.out.println(answer);
-            return;
-        } else {
-                    if (map[x][y]) {
-                        map[x][y] = false;
-                        DFS(map, y, x + 1, answer + " " + (y + 1));
-                        int tmp = y;
-                        while(!map[x][y])
-                        {
-                            y++;
-                            if(y==num)
-                                break;
-                        }
-                        DFS(map, x, y, answer);
-                    } else {
-                        while(!map[x][y])
-                        {
-                            y++;
-                            if(y==num)
-                                break;
-                        }
-                        DFS(map, x, y, answer);
+        for(int i = 0;i<num;i++) {
+                if (map[x][y]) {
+                    map[x][y] = false;
+                    DFS(map, y, x + 1, answer + " " + (y + 1));
+                    System.out.println(answer);
+                    int tmp = y;
+                    while (!map[x][y]) {
+                        y++;
+                        if (y == num)
+                            break;
                     }
-        }
+                }
+                else
+                {
+                    while(!map[x][y])
+                    {
+                        y++;
+                        if(y==num)
+                            break;
+                    }
+                    if(y==num)
+                        return;
+                    DFS(map, x, y, answer);
+                }
+            }
     }
 
     public int solution(int n, int[][] edge) {
